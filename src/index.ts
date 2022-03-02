@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next'
+import { GraphQLSchema } from "graphql";
 
 import {
   getGraphQLParameters,
@@ -13,7 +14,6 @@ import {
   // useImmediateIntrospection,
   // useTiming,
 } from "@envelop/core";
-import { GraphQLSchema } from "graphql";
 
 interface Options {
   schema: GraphQLSchema;

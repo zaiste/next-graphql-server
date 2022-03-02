@@ -17,10 +17,8 @@
   },
   "devDependencies": {
     "@types/node": "^17.0.21",
+    "clean-publish": "^4.0.0",
     "next": "^12.1.0",
     "typescript": "4.6.2"
-  },
-  "peerDependencies": {
-    "graphql": "^15.3.0 || ^16.0.0"
   }
 }
