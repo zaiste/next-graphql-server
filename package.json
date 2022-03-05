@@ -4,11 +4,13 @@
   "description": "Build GraphQL Servers with Next.js",
   "main": "dist/index.js",
   "types": "dist/index.d.js",
+  "author": "Zaiste",
+  "license": "Apache 2.0",
   "scripts": {
-    "watch": "tsc -w"
+    "watch": "tsc -w",
+    "prepublishOnly": "rm -rf ./package && clean-publish",
+    "postpublish": ""
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "@envelop/core": "^2.1.0",
     "@envelop/response-cache": "^2.1.0",
@@ -21,5 +23,13 @@
     "clean-publish": "^4.0.0",
     "next": "^12.1.0",
     "typescript": "4.6.2"
+  },
+  "publishConfig": {
+    "directory": "package"
+  },
+  "clean-publish": {
+    "tempDir": "package",
+    "files": ["src", "tsconfig.json"],
+    "fields": ["publishConfig"]
   }
 }
