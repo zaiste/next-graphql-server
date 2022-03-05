@@ -27,13 +27,61 @@ yarn add next-graphql-server
 
 `next-graphql-server` uses [Next.js API Routes](https://nextjs.org/docs/api-routes/introduction). Create the `pages/api/graphql.js` with the following content:
 
-```ts
-// pages/api/graphql.(js|ts)
-import { createGraphQLHandler } from "next-graphql-server";
+### with `graphql`
 
-const schema = `...` // your schema definition
+```ts
+import { createGraphQLHandler } from "next-graphql-server";
+import {
+  GraphQLObjectType,
+  GraphQLSchema,
+  GraphQLString,
+} from "graphql";
+
+const schema = new GraphQLSchema({
+  query: new GraphQLObjectType({
+    name: "Query",
+    fields: () => ({
+      hello: {
+        type: GraphQLString,
+        resolve: () => "world",
+      },
+    }),
+  }),
+});
 
 const handler = createGraphQLHandler(schema);
 export default handler;
 ```
 
+### with `@graphql-tools` 
+
+Add `@graphql-tools/schema`
+
+```
+pnpm add @graphql-tools/schema
+```
+
+In `pages/api/graphql.ts` define your handler as shown below:
+
+```ts
+import { createGraphQLHandler } from "next-graphql-server";
+import { makeExecutableSchema } from "@graphql-tools/schema";
+
+export const schema = makeExecutableSchema({
+  typeDefs: /* GraphQL */ `
+    type Query {
+      hello: String!
+    }
+  `,
+  resolvers: {
+    Query: {
+      hello: () => 'World',
+    },
+  },
+});
+
+const handler = createGraphQLHandler(schema);
+export default handler;
+```
+
+### with Pothos
