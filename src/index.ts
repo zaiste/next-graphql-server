@@ -9,23 +9,33 @@ import {
 } from "graphql-helix";
 import {
   envelop,
+  useImmediateIntrospection,
+  useLogger,
   useSchema,
-  // useLogger,
-  // useImmediateIntrospection,
-  // useTiming,
+  useTiming,
 } from "@envelop/core";
+import { useResponseCache } from '@envelop/response-cache';
 
 interface Options {
-  schema: GraphQLSchema;
-  isProduction: boolean;
+  isLogger?: boolean
+  isTiming?: boolean
+  isImmediateIntrospection?: boolean
+  isResponseCache?: boolean
+
+  endpoint?: string
 }
 
-export const Handler = ({ schema, isProduction }: Options) => {
+export const createGraphQLHandler = (schema: GraphQLSchema, { 
+  isLogger, isImmediateIntrospection, isTiming, isResponseCache,
+  endpoint = '/api/graphql'
+}: Options = {}) => {
+
   const plugins = [
     useSchema(schema),
-    // useResponseCache(),
-    ...(isProduction ? [] : []),
-    // : [useLogger(), useTiming(), useImmediateIntrospection()]),
+    ...(isLogger ? [useLogger()] : []),
+    ...(isTiming ? [useTiming()] : []),
+    ...(isImmediateIntrospection ? [useImmediateIntrospection()] : []),
+    ...(isResponseCache ? [useResponseCache()] : []),
   ];
 
   const getEnveloped = envelop({ plugins });
@@ -35,32 +45,19 @@ export const Handler = ({ schema, isProduction }: Options) => {
       res.writeHead(200, {
         "content-type": "text/html",
       });
-      res.end(renderGraphiQL({ endpoint: "/api/graphql" }));
+      res.end(renderGraphiQL({ endpoint }));
     } else {
 
-      const { parse, validate, contextFactory, execute, schema } = getEnveloped(
-        {
-          req,
-        }
-      );
+      const enveloped = getEnveloped({ req });
 
-      const request = {
-        body: req.body, 
-        headers: req.headers,
-        method: req.method!,
-        query: req.query 
-      };
-      const { operationName, query, variables } = getGraphQLParameters(request);
+      const { body, headers, method = 'GET', query } = req;
+      const request = { body, headers, method, query };
+      
+      const params = getGraphQLParameters(request);
       const result = await processRequest({
-        operationName,
-        query,
-        variables,
         request,
-        schema,
-        parse,
-        validate,
-        execute,
-        contextFactory,
+        ...enveloped,
+        ...params,
       });
 
       sendResult(result, res);
