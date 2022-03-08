@@ -8,7 +8,7 @@ specifiers:
   '@types/node': ^17.0.21
   clean-publish: ^4.0.0
   graphql: 16.3.0
-  graphql-helix: ^1.11.0
+  graphql-helix: ^1.12.0
   next: ^12.1.0
   typescript: 4.6.2
 
@@ -18,7 +18,7 @@ dependencies:
   '@envelop/response-cache': 2.1.0_2ce9ddfcd874d5e5ef5d4ab8aeb65306
   '@graphql-tools/schema': 8.3.2_graphql@16.3.0
   graphql: 16.3.0
-  graphql-helix: 1.11.0_graphql@16.3.0
+  graphql-helix: 1.12.0_graphql@16.3.0
 
 devDependencies:
   '@types/node': 17.0.21
@@ -304,8 +304,8 @@ packages:
       is-glob: 4.0.3
     dev: true
 
-  /graphql-helix/1.11.0_graphql@16.3.0:
-    resolution: {integrity: sha512-JFBuIsfeNDTTotAkHzwTmXgSpFi2bfoX4E8ZlXfgQB2gD8XgOWSTJc1ujN59ZrGBI8M/99h3tEIaH5grR17EIA==}
+  /graphql-helix/1.12.0_graphql@16.3.0:
+    resolution: {integrity: sha512-wTu1m/ZFBCgzLPCg/dHO4cNy9JR5Sq/3RqDVblqrU3b/Yem7EXZtQMzG045tHqkCdbgcgQl+kIkXDur1yLfdtw==}
     peerDependencies:
       graphql: ^15.3.0 || ^16.0.0
     dependencies:
