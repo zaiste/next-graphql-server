@@ -15,18 +15,21 @@ import {
   useTiming,
 } from "@envelop/core";
 import { useResponseCache } from '@envelop/response-cache';
+import { useGenericAuth, GenericAuthPluginOptions } from '@envelop/generic-auth';
 
 interface Options {
   isLogger?: boolean
   isTiming?: boolean
   isImmediateIntrospection?: boolean
   isResponseCache?: boolean
+  isAuth?: GenericAuthPluginOptions 
 
   endpoint?: string
 }
 
 export const createGraphQLHandler = (schema: GraphQLSchema, { 
   isLogger, isImmediateIntrospection, isTiming, isResponseCache,
+  isAuth,
   endpoint = '/api/graphql'
 }: Options = {}) => {
 
@@ -36,6 +39,7 @@ export const createGraphQLHandler = (schema: GraphQLSchema, {
     ...(isTiming ? [useTiming()] : []),
     ...(isImmediateIntrospection ? [useImmediateIntrospection()] : []),
     ...(isResponseCache ? [useResponseCache()] : []),
+    ...(isAuth ? [useGenericAuth(isAuth)] : []),
   ];
 
   const getEnveloped = envelop({ plugins });
