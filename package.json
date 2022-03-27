@@ -8,7 +8,7 @@
   "license": "Apache 2.0",
   "scripts": {
     "watch": "tsc -w",
-    "prepublishOnly": "rm -rf ./package && clean-publish",
+    "prepublishOnly": "rm -rf ./package && tsc && clean-publish",
     "postpublish": ""
   },
   "dependencies": {

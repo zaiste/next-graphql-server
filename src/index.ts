@@ -9,37 +9,37 @@ import {
 } from "graphql-helix";
 import {
   envelop,
-  useImmediateIntrospection,
-  useLogger,
+  useImmediateIntrospection as ImmediateIntrospection,
+  useLogger as Logger,
   useSchema,
-  useTiming,
+  useTiming as Timing,
 } from "@envelop/core";
-import { useResponseCache, UseResponseCacheParameter } from '@envelop/response-cache';
+import { useResponseCache as ResponseCache, UseResponseCacheParameter } from '@envelop/response-cache';
 import { useGenericAuth, GenericAuthPluginOptions } from '@envelop/generic-auth';
 
 interface Options {
-  isLogger?: boolean
-  isTiming?: boolean
-  isImmediateIntrospection?: boolean
-  isResponseCache?: boolean | UseResponseCacheParameter
-  isAuth?: GenericAuthPluginOptions 
+  useLogger?: boolean
+  useTiming?: boolean
+  useImmediateIntrospection?: boolean
+  useResponseCache?: boolean | UseResponseCacheParameter
+  useAuth?: GenericAuthPluginOptions 
 
   endpoint?: string
 }
 
 export const createGraphQLHandler = (schema: GraphQLSchema, { 
-  isLogger, isImmediateIntrospection, isTiming, isResponseCache,
-  isAuth,
+  useLogger, useImmediateIntrospection, useTiming, useResponseCache,
+  useAuth,
   endpoint = '/api/graphql'
 }: Options = {}) => {
 
   const plugins = [
     useSchema(schema),
-    ...(isLogger ? [useLogger()] : []),
-    ...(isTiming ? [useTiming()] : []),
-    ...(isImmediateIntrospection ? [useImmediateIntrospection()] : []),
-    ...(isResponseCache ? [useResponseCache(isResponseCache !== true ? isResponseCache : undefined)] : []),
-    ...(isAuth ? [useGenericAuth(isAuth)] : []),
+    ...(useLogger ? [Logger()] : []),
+    ...(useTiming ? [Timing()] : []),
+    ...(useImmediateIntrospection ? [ImmediateIntrospection()] : []),
+    ...(useResponseCache ? [ResponseCache(useResponseCache !== true ? useResponseCache : undefined)] : []),
+    ...(useAuth ? [useGenericAuth(useAuth)] : []),
   ];
 
   const getEnveloped = envelop({ plugins });
