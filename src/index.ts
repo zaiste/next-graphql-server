@@ -14,14 +14,14 @@ import {
   useSchema,
   useTiming,
 } from "@envelop/core";
-import { useResponseCache } from '@envelop/response-cache';
+import { useResponseCache, UseResponseCacheParameter } from '@envelop/response-cache';
 import { useGenericAuth, GenericAuthPluginOptions } from '@envelop/generic-auth';
 
 interface Options {
   isLogger?: boolean
   isTiming?: boolean
   isImmediateIntrospection?: boolean
-  isResponseCache?: boolean
+  isResponseCache?: boolean | UseResponseCacheParameter
   isAuth?: GenericAuthPluginOptions 
 
   endpoint?: string
@@ -38,7 +38,7 @@ export const createGraphQLHandler = (schema: GraphQLSchema, {
     ...(isLogger ? [useLogger()] : []),
     ...(isTiming ? [useTiming()] : []),
     ...(isImmediateIntrospection ? [useImmediateIntrospection()] : []),
-    ...(isResponseCache ? [useResponseCache()] : []),
+    ...(isResponseCache ? [useResponseCache(isResponseCache !== true ? isResponseCache : undefined)] : []),
     ...(isAuth ? [useGenericAuth(isAuth)] : []),
   ];
 

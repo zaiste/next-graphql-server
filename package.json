@@ -13,17 +13,17 @@
   },
   "dependencies": {
     "@envelop/core": "^2.1.0",
-    "@envelop/generic-auth": "^4.0.0",
-    "@envelop/response-cache": "^2.1.0",
-    "@graphql-tools/schema": "^8.3.2",
+    "@envelop/generic-auth": "^4.0.1",
+    "@envelop/response-cache": "^2.1.1",
+    "@graphql-tools/schema": "^8.3.5",
     "graphql": "16.3.0",
     "graphql-helix": "^1.12.0"
   },
   "devDependencies": {
-    "@types/node": "^17.0.21",
+    "@types/node": "^17.0.23",
     "clean-publish": "^4.0.0",
-    "next": "^12.1.0",
-    "typescript": "4.6.2"
+    "next": "^12.1.1",
+    "typescript": "4.6.3"
   },
   "publishConfig": {
     "directory": "package"
