@@ -1,6 +1,6 @@
 {
   "name": "next-graphql-server",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Build GraphQL Servers with Next.js",
   "main": "dist/index.js",
   "types": "dist/index.d.js",
@@ -12,17 +12,17 @@
     "postpublish": ""
   },
   "dependencies": {
-    "@envelop/core": "^2.1.0",
-    "@envelop/generic-auth": "^4.0.1",
-    "@envelop/response-cache": "^2.1.1",
-    "@graphql-tools/schema": "^8.3.5",
+    "@envelop/core": "^2.3.0",
+    "@envelop/generic-auth": "^4.2.0",
+    "@envelop/response-cache": "^2.3.0",
+    "@graphql-tools/schema": "^8.3.6",
     "graphql": "16.3.0",
     "graphql-helix": "^1.12.0"
   },
   "devDependencies": {
     "@types/node": "^17.0.23",
     "clean-publish": "^4.0.0",
-    "next": "^12.1.1",
+    "next": "^12.1.4",
     "typescript": "4.6.3"
   },
   "publishConfig": {
