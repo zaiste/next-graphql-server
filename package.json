@@ -12,18 +12,18 @@
     "postpublish": ""
   },
   "dependencies": {
-    "@envelop/core": "^2.3.0",
-    "@envelop/generic-auth": "^4.2.0",
-    "@envelop/response-cache": "^2.3.0",
-    "@graphql-tools/schema": "^8.3.6",
-    "graphql": "16.3.0",
+    "@envelop/core": "^2.3.3",
+    "@envelop/generic-auth": "^4.2.4",
+    "@envelop/response-cache": "^2.3.3",
+    "@graphql-tools/schema": "^8.3.14",
+    "graphql": "16.5.0",
     "graphql-helix": "^1.12.0"
   },
   "devDependencies": {
-    "@types/node": "^17.0.23",
-    "clean-publish": "^4.0.0",
-    "next": "^12.1.4",
-    "typescript": "4.6.3"
+    "@types/node": "^17.0.42",
+    "clean-publish": "^4.0.1",
+    "next": "^12.1.6",
+    "typescript": "4.7.3"
   },
   "publishConfig": {
     "directory": "package"
