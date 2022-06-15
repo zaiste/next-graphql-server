@@ -1,4 +1,5 @@
-import { NextApiRequest, NextApiResponse } from 'next'
+import type { NodeNextRequest } from "next/dist/server/base-http/node";
+import { NextApiRequest, NextApiResponse } from 'next';
 import { GraphQLSchema } from "graphql";
 
 import {
@@ -25,12 +26,14 @@ interface Options {
   useAuth?: GenericAuthPluginOptions 
 
   endpoint?: string
+  edge?: boolean
 }
 
 export const createGraphQLHandler = (schema: GraphQLSchema, { 
   useLogger, useImmediateIntrospection, useTiming, useResponseCache,
   useAuth,
-  endpoint = '/api/graphql'
+  endpoint = '/api/graphql',
+  edge = false,
 }: Options = {}) => {
 
   const plugins = [
@@ -44,7 +47,37 @@ export const createGraphQLHandler = (schema: GraphQLSchema, {
 
   const getEnveloped = envelop({ plugins });
 
-  const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  const handler = edge ? async (req: NodeNextRequest) => {
+    if (req.method === "GET") {
+      return new Response(renderGraphiQL({ endpoint }), { 
+        headers: {
+          "Content-Type": "text/html"
+        }
+      })
+    } else {
+      const enveloped = getEnveloped({ req });
+
+      const { body, headers, method = 'GET' } = req;
+      const request = { body, headers, method, query: '' };
+      
+      const params = getGraphQLParameters(request);
+      const result = await processRequest({
+        request,
+        ...enveloped,
+        ...params,
+      });
+
+      if (result.type === 'RESPONSE') {
+        return new Response(JSON.stringify(result.payload), {
+          headers: { 
+            "Content-Type": "application/json"
+          }
+        })
+      } else {
+        return new Response('Something is not OK');
+      }
+    }
+  } : async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === "GET") {
       res.writeHead(200, {
         "content-type": "text/html",
