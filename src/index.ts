@@ -70,7 +70,7 @@ export const createGraphQLHandler = (schema: GraphQLSchema, {
     } else {
       const enveloped = getEnveloped({ req });
 
-      const { body, headers, method = 'GET' } = req;
+      const { headers, method = 'GET' } = req;
 
       const u = new URL(req.url);
       const query: Record<string, string | number | boolean> = {};
@@ -78,8 +78,8 @@ export const createGraphQLHandler = (schema: GraphQLSchema, {
         query[p[0]] = parseValue(p[1]);
       }
 
-      const request = { body, headers, method, query };
-      
+      const request = { body: await req.json(), headers, method, query };
+
       const params = getGraphQLParameters(request);
       const result = await processRequest({
         request,
