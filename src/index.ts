@@ -1,4 +1,3 @@
-import type { NodeNextRequest } from "next/dist/server/base-http/node";
 import { NextApiRequest, NextApiResponse } from 'next';
 import { GraphQLSchema } from "graphql";
 
@@ -17,6 +16,20 @@ import {
 } from "@envelop/core";
 import { useResponseCache as ResponseCache, UseResponseCacheParameter } from '@envelop/response-cache';
 import { useGenericAuth, GenericAuthPluginOptions } from '@envelop/generic-auth';
+
+const parseValue = (v: string): string | number | boolean => {
+  if (v === "") {
+    return true;
+  } else if (v === "true") {
+    return true;
+  } else if (v === "false") {
+    return false;
+  } else if (!isNaN(Number(v))) {
+    return +v;
+  }
+  return v;
+}
+
 
 interface Options {
   useLogger?: boolean
@@ -47,7 +60,7 @@ export const createGraphQLHandler = (schema: GraphQLSchema, {
 
   const getEnveloped = envelop({ plugins });
 
-  const handler = edge ? async (req: NodeNextRequest) => {
+  const handler = edge ? async (req: Request) => {
     if (req.method === "GET") {
       return new Response(renderGraphiQL({ endpoint }), { 
         headers: {
@@ -58,7 +71,14 @@ export const createGraphQLHandler = (schema: GraphQLSchema, {
       const enveloped = getEnveloped({ req });
 
       const { body, headers, method = 'GET' } = req;
-      const request = { body, headers, method, query: '' };
+
+      const u = new URL(req.url);
+      const query: Record<string, string | number | boolean> = {};
+      for (const p of u.searchParams) {
+        query[p[0]] = parseValue(p[1]);
+      }
+
+      const request = { body, headers, method, query };
       
       const params = getGraphQLParameters(request);
       const result = await processRequest({
