@@ -36,13 +36,16 @@ interface Options {
   useTiming?: boolean
   useImmediateIntrospection?: boolean
   useResponseCache?: boolean | UseResponseCacheParameter
-  useAuth?: GenericAuthPluginOptions 
+  useAuth?: GenericAuthPluginOptions
 
   endpoint?: string
   edge?: boolean
 }
 
-export const createGraphQLHandler = (schema: GraphQLSchema, { 
+export const createGraphQLHandler = ({ schema, context = () => { } }: {
+  schema: GraphQLSchema,
+  context: (req: NextApiRequest | Request) => unknown | Promise<unknown>
+}, {
   useLogger, useImmediateIntrospection, useTiming, useResponseCache,
   useAuth,
   endpoint = '/api/graphql',
@@ -62,7 +65,7 @@ export const createGraphQLHandler = (schema: GraphQLSchema, {
 
   const handler = edge ? async (req: Request) => {
     if (req.method === "GET") {
-      return new Response(renderGraphiQL({ endpoint }), { 
+      return new Response(renderGraphiQL({ endpoint }), {
         headers: {
           "Content-Type": "text/html"
         }
@@ -90,11 +93,14 @@ export const createGraphQLHandler = (schema: GraphQLSchema, {
         request,
         ...enveloped,
         ...params,
+        contextFactory: () => {
+          return context(req)
+        },
       });
 
       if (result.type === 'RESPONSE') {
         return new Response(JSON.stringify(result.payload), {
-          headers: { 
+          headers: {
             "Content-Type": "application/json"
           }
         })
@@ -114,12 +120,15 @@ export const createGraphQLHandler = (schema: GraphQLSchema, {
 
       const { body, headers, method = 'GET', query } = req;
       const request = { body, headers, method, query };
-      
+
       const params = getGraphQLParameters(request);
       const result = await processRequest({
         request,
         ...enveloped,
         ...params,
+        contextFactory: () => {
+          return context(req)
+        },
       });
 
       sendResult(result, res);
