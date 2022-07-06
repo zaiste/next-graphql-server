@@ -30,7 +30,6 @@ const parseValue = (v: string): string | number | boolean => {
   return v;
 }
 
-
 interface Options {
   useLogger?: boolean
   useTiming?: boolean
@@ -40,16 +39,15 @@ interface Options {
 
   endpoint?: string
   edge?: boolean
+  context?: Function
 }
 
-export const createGraphQLHandler = ({ schema, context = () => { } }: {
-  schema: GraphQLSchema,
-  context: (req: NextApiRequest | Request) => unknown | Promise<unknown>
-}, {
+export const createGraphQLHandler = (schema: GraphQLSchema, {
   useLogger, useImmediateIntrospection, useTiming, useResponseCache,
   useAuth,
   endpoint = '/api/graphql',
   edge = false,
+  context = () => { },
 }: Options = {}) => {
 
   const plugins = [
@@ -127,7 +125,7 @@ export const createGraphQLHandler = ({ schema, context = () => { } }: {
         ...enveloped,
         ...params,
         contextFactory: () => {
-          return context(req)
+          return context(req, res)
         },
       });
 
