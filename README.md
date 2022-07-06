@@ -9,14 +9,24 @@ Start building GraphQL servers with Next.js.
 * built using [Envelop](https://www.envelop.dev) and [Helix](https://graphql-helix.vercel.app) - stackable and easy to extend architecture
 * supports Vercel Edge functions 
 
-## Install
+## Getting Started 
+
+Create a Next.js project:
 
 ```
-npm install next-graphql-server
+pnpm create next-app --typescript
 ```
+
+Add `next-graphql-server` as a dependency to your Next.js project:
 
 ```
 pnpm add next-graphql-server
+```
+
+**Note**: `pnpm` is preferred, but you can also use `npm` or `yarn`
+
+```
+npm install next-graphql-server
 ```
 
 ```
@@ -25,9 +35,17 @@ yarn add next-graphql-server
 
 ## Usage
 
-`next-graphql-server` uses [Next.js API Routes](https://nextjs.org/docs/api-routes/introduction). Create the `pages/api/graphql.js` with the following content:
+`next-graphql-server` uses [Next.js API Routes](https://nextjs.org/docs/api-routes/introduction). Create the `pages/api/graphql.ts` with the following content:
+
+**Note**: The file in `pages/api` must be named `graphql`
 
 ### with `graphql`
+
+Add `graphql` 
+
+```
+pnpm add graphql
+```
 
 ```ts
 import { createGraphQLHandler } from "next-graphql-server";
