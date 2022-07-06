@@ -5,7 +5,7 @@ specifiers:
   '@envelop/generic-auth': ^4.3.0
   '@envelop/response-cache': ^2.4.0
   '@graphql-tools/schema': ^8.5.0
-  '@types/node': ^18.0.1
+  '@types/node': ^18.0.3
   clean-publish: ^4.0.1
   graphql: 16.5.0
   graphql-helix: ^1.12.0
@@ -21,7 +21,7 @@ dependencies:
   graphql-helix: 1.12.0_graphql@16.5.0
 
 devDependencies:
-  '@types/node': 18.0.1
+  '@types/node': 18.0.3
   clean-publish: 4.0.1
   next: 12.2.0
   typescript: 4.7.4
@@ -259,8 +259,8 @@ packages:
       tslib: 2.4.0
     dev: true
 
-  /@types/node/18.0.1:
-    resolution: {integrity: sha512-CmR8+Tsy95hhwtZBKJBs0/FFq4XX7sDZHlGGf+0q+BRZfMbOTkzkj0AFAuTyXbObDIoanaBBW0+KEW+m3N16Wg==}
+  /@types/node/18.0.3:
+    resolution: {integrity: sha512-HzNRZtp4eepNitP+BD6k2L6DROIDG4Q0fm4x+dwfsr6LGmROENnok75VGw40628xf+iR24WeMFcHuuBDUAzzsQ==}
     dev: true
 
   /braces/3.0.2:
