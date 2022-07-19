@@ -14,15 +14,15 @@
   "dependencies": {
     "@envelop/core": "^2.4.0",
     "@envelop/generic-auth": "^4.3.0",
-    "@envelop/response-cache": "^2.4.0",
+    "@envelop/response-cache": "^3.0.0",
     "@graphql-tools/schema": "^8.5.0",
     "graphql": "16.5.0",
-    "graphql-helix": "^1.12.0"
+    "graphql-helix": "^1.13.0"
   },
   "devDependencies": {
-    "@types/node": "^18.0.3",
+    "@types/node": "^18.0.6",
     "clean-publish": "^4.0.1",
-    "next": "^12.2.0",
+    "next": "^12.2.2",
     "typescript": "4.7.4"
   },
   "publishConfig": {
