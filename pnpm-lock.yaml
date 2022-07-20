@@ -3,7 +3,6 @@ lockfileVersion: 5.4
 specifiers:
   '@envelop/core': ^2.4.0
   '@envelop/generic-auth': ^4.3.0
-  '@envelop/response-cache': ^3.0.0
   '@graphql-tools/schema': ^8.5.0
   '@types/node': ^18.0.6
   clean-publish: ^4.0.1
@@ -15,7 +14,6 @@ specifiers:
 dependencies:
   '@envelop/core': 2.4.0_graphql@16.5.0
   '@envelop/generic-auth': 4.3.0_zl5lvrohcyw2xfj2623xbuma4m
-  '@envelop/response-cache': 3.0.0_zl5lvrohcyw2xfj2623xbuma4m
   '@graphql-tools/schema': 8.5.0_graphql@16.5.0
   graphql: 16.5.0
   graphql-helix: 1.13.0_graphql@16.5.0
@@ -57,19 +55,6 @@ packages:
       '@envelop/core': 2.4.0_graphql@16.5.0
       '@envelop/extended-validation': 1.7.0_zl5lvrohcyw2xfj2623xbuma4m
       graphql: 16.5.0
-    dev: false
-
-  /@envelop/response-cache/3.0.0_zl5lvrohcyw2xfj2623xbuma4m:
-    resolution: {integrity: sha512-sGlX5noloUqUG5oVfckbuXTuOaFsYLEqz5zTgrTE47eTE+j+s1mooKecr0fyr3M83DHf/plF0/xilOtHsrJxyQ==}
-    peerDependencies:
-      '@envelop/core': ^2.4.0
-      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-    dependencies:
-      '@envelop/core': 2.4.0_graphql@16.5.0
-      '@graphql-tools/utils': 8.8.0_graphql@16.5.0
-      fast-json-stable-stringify: 2.1.0
-      graphql: 16.5.0
-      lru-cache: 6.0.0
     dev: false
 
   /@envelop/types/2.3.0_graphql@16.5.0:
@@ -305,10 +290,6 @@ packages:
       micromatch: 4.0.5
     dev: true
 
-  /fast-json-stable-stringify/2.1.0:
-    resolution: {integrity: sha512-lhd/wF+Lk98HZoTCtlVraHtfh5XYijIjalXck7saUtuanSDyLMxnHhSXEDJqHxD7msR8D0uCmqlkwjCV8xvwHw==}
-    dev: false
-
   /fastq/1.13.0:
     resolution: {integrity: sha512-YpkpUnK8od0o1hmeSc7UUs/eB/vIPWJYjKck2QKIzAf71Vm1AAQ3EbuZB3g2JIy+pg+ERD0vqI79KyZiB2e2Nw==}
     dependencies:
@@ -367,13 +348,6 @@ packages:
     resolution: {integrity: sha512-9JROoBW7pobfsx+Sq2JsASvCo6Pfo6WWoUW79HuB1BCoBXD4PLWJPqDF6fNj67pqBYTbAHkE57M1kS/+L1neOg==}
     engines: {node: '>=10'}
     dev: true
-
-  /lru-cache/6.0.0:
-    resolution: {integrity: sha512-Jo6dJ04CmSjuznwJSS3pUeWmd/H0ffTlkXXgwZi+eq1UCmqQwCh+eLsYOYCwY991i2Fah4h1BEMCx4qThGbsiA==}
-    engines: {node: '>=10'}
-    dependencies:
-      yallist: 4.0.0
-    dev: false
 
   /merge2/1.4.1:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
@@ -540,7 +514,3 @@ packages:
     dependencies:
       isexe: 2.0.0
     dev: true
-
-  /yallist/4.0.0:
-    resolution: {integrity: sha512-3wdGidZyq5PB084XLES5TpOSRA3wjXAlIWMhum2kRcv/41Sn2emQ0dycQW4uZXLejwKvg6EsvbdlVL+FYEct7A==}
-    dev: false

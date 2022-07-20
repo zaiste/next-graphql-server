@@ -14,7 +14,6 @@ import {
   useSchema,
   useTiming as Timing,
 } from "@envelop/core";
-import { useResponseCache as ResponseCache, UseResponseCacheParameter } from '@envelop/response-cache';
 import { useGenericAuth, GenericAuthPluginOptions } from '@envelop/generic-auth';
 
 const parseValue = (v: string): string | number | boolean => {
@@ -34,7 +33,6 @@ interface Options {
   useLogger?: boolean
   useTiming?: boolean
   useImmediateIntrospection?: boolean
-  useResponseCache?: boolean | UseResponseCacheParameter
   useAuth?: GenericAuthPluginOptions
 
   endpoint?: string
@@ -43,7 +41,7 @@ interface Options {
 }
 
 export const createGraphQLHandler = (schema: GraphQLSchema, {
-  useLogger, useImmediateIntrospection, useTiming, useResponseCache,
+  useLogger, useImmediateIntrospection, useTiming,
   useAuth,
   endpoint = '/api/graphql',
   edge = false,
@@ -55,7 +53,6 @@ export const createGraphQLHandler = (schema: GraphQLSchema, {
     ...(useLogger ? [Logger()] : []),
     ...(useTiming ? [Timing()] : []),
     ...(useImmediateIntrospection ? [ImmediateIntrospection()] : []),
-    ...(useResponseCache ? [ResponseCache(useResponseCache !== true ? useResponseCache : undefined)] : []),
     ...(useAuth ? [useGenericAuth(useAuth)] : []),
   ];
 
