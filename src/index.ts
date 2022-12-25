@@ -1,33 +1,17 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { GraphQLSchema } from "graphql";
+import type { NextApiRequest, NextApiResponse } from 'next';
+
+import * as GraphQL from "graphql";
+
 
 import {
-  getGraphQLParameters,
-  processRequest,
-  sendResult,
-  renderGraphiQL,
-} from "graphql-helix";
-import {
   envelop,
-  useImmediateIntrospection as ImmediateIntrospection,
   useLogger as Logger,
   useSchema,
-  useTiming as Timing,
+  useEngine
 } from "@envelop/core";
 import { useGenericAuth, GenericAuthPluginOptions } from '@envelop/generic-auth';
 
-const parseValue = (v: string): string | number | boolean => {
-  if (v === "") {
-    return true;
-  } else if (v === "true") {
-    return true;
-  } else if (v === "false") {
-    return false;
-  } else if (!isNaN(Number(v))) {
-    return +v;
-  }
-  return v;
-}
+import { GraphiQL } from './graphiql';
 
 interface Options {
   useLogger?: boolean
@@ -40,8 +24,8 @@ interface Options {
   context?: Function
 }
 
-export const createGraphQLHandler = (schema: GraphQLSchema, {
-  useLogger, useImmediateIntrospection, useTiming,
+export const createGraphQLHandler = (schema: GraphQL.GraphQLSchema, {
+  useLogger,
   useAuth,
   endpoint = '/api/graphql',
   edge = false,
@@ -49,10 +33,9 @@ export const createGraphQLHandler = (schema: GraphQLSchema, {
 }: Options = {}) => {
 
   const plugins = [
+    useEngine(GraphQL),
     useSchema(schema),
     ...(useLogger ? [Logger()] : []),
-    ...(useTiming ? [Timing()] : []),
-    ...(useImmediateIntrospection ? [ImmediateIntrospection()] : []),
     ...(useAuth ? [useGenericAuth(useAuth)] : []),
   ];
 
@@ -60,74 +43,75 @@ export const createGraphQLHandler = (schema: GraphQLSchema, {
 
   const handler = edge ? async (req: Request) => {
     if (req.method === "GET") {
-      return new Response(renderGraphiQL({ endpoint }), {
+      return new Response(GraphiQL(endpoint), {
         headers: {
           "Content-Type": "text/html"
         }
       })
     } else {
-      const enveloped = getEnveloped({ req });
+      const { parse, validate, contextFactory, execute, schema } = getEnveloped({ req });
 
-      const { method = 'GET' } = req;
+      const _a = context;
 
-      const headers: Record<string, string> = {};
-      for (const [key, value] of req.headers) {
-        headers[key] = value
+      const { query, variables } = await req.json();
+      const document = parse(query)
+      const validationErrors = validate(schema, document)
+
+      if (validationErrors.length > 0) {
+        return new Response(JSON.stringify({ errors: validationErrors }))
       }
 
-      const u = new URL(req.url);
-      const query: Record<string, string | number | boolean> = {};
-      for (const p of u.searchParams) {
-        query[p[0]] = parseValue(p[1]);
-      }
+      const contextValue = await contextFactory()
+      const result = await execute({
+        document,
+        schema,
+        variableValues: variables,
+        contextValue
+      })
 
-      const request = { body: await req.json(), headers, method, query };
-
-      const params = getGraphQLParameters(request);
-      const result = await processRequest({
-        request,
-        ...enveloped,
-        ...params,
-        contextFactory: () => {
-          return context(req)
-        },
-      });
-
-      if (result.type === 'RESPONSE') {
-        return new Response(JSON.stringify(result.payload), {
-          headers: {
-            "Content-Type": "application/json"
-          }
-        })
-      } else {
-        return new Response('Something is not OK');
-      }
+      return new Response(JSON.stringify(result), {
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
     }
   } : async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === "GET") {
       res.writeHead(200, {
         "content-type": "text/html",
       });
-      res.end(renderGraphiQL({ endpoint }));
+      res.end(GraphiQL(endpoint));
     } else {
+      const {
+        parse,
+        validate,
+        contextFactory,
+        execute,
+        schema
+      } = getEnveloped({ req })
 
-      const enveloped = getEnveloped({ req });
+      const { query, variables } = req.body
+      const document = parse(query)
+      const validationErrors = validate(schema, document)
 
-      const { body, headers, method = 'GET', query } = req;
-      const request = { body, headers, method, query };
+      if (validationErrors.length > 0) {
+        return res.end(JSON.stringify({ errors: validationErrors }))
+      }
 
-      const params = getGraphQLParameters(request);
-      const result = await processRequest({
-        request,
-        ...enveloped,
-        ...params,
-        contextFactory: () => {
-          return context(req, res)
-        },
-      });
+      // Build the context and execute
+      const contextValue = await contextFactory()
+      const result = await execute({
+        document,
+        schema,
+        variableValues: variables,
+        contextValue
+      })
 
-      sendResult(result, res);
+      // Send the response
+      res.end(JSON.stringify(result))
     }
+
+    return
   };
 
   return handler;

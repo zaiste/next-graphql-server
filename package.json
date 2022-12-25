@@ -7,34 +7,18 @@
   "author": "Zaiste",
   "license": "Apache 2.0",
   "scripts": {
-    "watch": "tsc -w",
-    "prepublishOnly": "rm -rf ./package && tsc && clean-publish",
-    "postpublish": ""
+    "watch": "tsc -w"
   },
   "dependencies": {
     "@envelop/core": "^3.0.4",
     "@envelop/generic-auth": "^5.0.4",
     "@graphql-tools/schema": "^9.0.12",
-    "graphql": "16.6.0",
-    "graphql-helix": "^1.13.0"
+    "graphql": "16.6.0"
   },
   "devDependencies": {
     "@types/node": "^18.11.17",
     "clean-publish": "^4.0.2",
     "next": "^13.1.1",
     "typescript": "4.9.4"
-  },
-  "publishConfig": {
-    "directory": "package"
-  },
-  "clean-publish": {
-    "tempDir": "package",
-    "files": [
-      "src",
-      "tsconfig.json"
-    ],
-    "fields": [
-      "publishConfig"
-    ]
   }
 }
