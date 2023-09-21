@@ -13,7 +13,7 @@
     "@envelop/core": "^3.0.4",
     "@envelop/generic-auth": "^5.0.4",
     "@graphql-tools/schema": "^9.0.12",
-    "graphql": "16.6.0"
+    "graphql": "16.8.1"
   },
   "devDependencies": {
     "@types/node": "^18.11.17",
